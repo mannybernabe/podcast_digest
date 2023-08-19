@@ -1,16 +1,31 @@
 import streamlit as st
 import pandas as pd
+from google.oauth2 import service_account
+from gsheetsdb import connect
 
-# Load the data
+# Setting up a connection to Google Sheets
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=[
+        "https://www.googleapis.com/auth/spreadsheets",
+    ],
+)
+conn = connect(credentials=credentials)
+
+# Fetch the data from Google Sheets
 @st.cache_resource
 def load_data():
-    return pd.read_csv("pod_db_data.csv")
+    sheet_url = st.secrets["private_gsheets_url"]
+    query = f'SELECT * FROM "{sheet_url}"'
+    rows = conn.execute(query, headers=1)
+    df = pd.DataFrame(rows.fetchall())
+    return df
 
 # Load the cached data
 podcast_data = load_data()
 
 # Title of the application
-st.title("Podcast Episodes")
+st.title("Podcast Episodes_2")
 
 # Function to truncate the summary for a preview
 def truncate_summary(summary, max_length=100):
