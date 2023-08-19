@@ -1,0 +1,3 @@
+gsheetsdb==x.x.x
+google-auth
+gsheetsdb
