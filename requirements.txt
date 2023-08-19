@@ -1,3 +1,2 @@
-gsheetsdb
+gsheetsdb==0.1.13.1
 google-auth
-gsheetsdb
